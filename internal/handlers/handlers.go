@@ -11,7 +11,11 @@ import (
 )
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	data, err := os.ReadFile("../index.html")
+	err := os.Chdir(".")
+	if err != nil {
+		log.Println("error in changing director:", err)
+	}
+	data, err := os.ReadFile("index.html")
 	if err != nil {
 		log.Println("error in reading file:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -30,7 +34,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	file, fileHeader, err := r.FormFile("file")
+	file, fileHeader, err := r.FormFile("myFile")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
